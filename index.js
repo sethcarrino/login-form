@@ -51,7 +51,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-  if (res.status === 304){
+  if (req.session.users === undefined || req.session.users.length == 0){
     res.redirect('/login');
   } else {
     res.render('home')
