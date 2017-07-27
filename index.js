@@ -5,6 +5,7 @@ const moment = require('moment');
 const morgan = require('morgan');
 const expressValidator = require('express-validator');
 const session = require('express-session');
+const users = require('./users.js')
 const fs = require('fs');
 const app = express();
 
@@ -36,21 +37,57 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // use express validator
 app.use(expressValidator());
 
+// create default session
+app.use((req, res, next) => {
+
+  if (!req.session.users) {
+
+    req.session.users = [];
+
+  }
+  console.log(req.session);
+
+  next();
+});
+
 app.get('/', (req, res) => {
-  res.render('home')
+  if (res.status === 304){
+    res.redirect('/login');
+  } else {
+    res.render('home')
+  }
 })
 
 app.get('/login', (req, res) =>{
-  res.render('login', {
-    email: email
-    password: password
-  })
+
+  res.render('login')
 })
 
 app.post('/login', (req, res) =>{
-  let loginInfo = req.body;
+  let userInfo = req.body;
+  console.log(userInfo);
 
   req.checkBody('email', 'Email is Required').notEmpty();
 
-  req.checkBody('password', '')
+  req.checkBody('password', 'Password is Required').notEmpty();
+
+  let errors = req.validationErrors();
+
+  if  (errors) {
+    console.log(errors);
+
+    res.render('login', {
+      errors: errors,
+      userInfo: userInfo
+    })
+
+  } else {
+
+    req.session.users.push(userInfo);
+
+    res.redirect('/');
+  }
 })
+
+// listen on port 3000
+app.listen(3000);

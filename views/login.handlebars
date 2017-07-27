@@ -5,10 +5,17 @@
     <title>Login</title>
   </head>
   <body>
+    <h1>Login to site</h1>
+    <ul class="error">
+    {{#errors}}
+        <li>{{msg}}</li>
+    {{/errors}}
+    </ul>
+
     <form action="/login" method="post">
-      <input type="email" name="email" /><br>
-      <input type="password" name="password" /></br>
-      <input type="submit" name="login" value="Login" />
+      <input type="email" name="email" placeholder="Email"/><br>
+      <input type="password" name="password" placeholder="Password" /></br>
+      <button>Login</button>
     </form>
   </body>
 </html>
