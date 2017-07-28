@@ -50,12 +50,14 @@ app.use((req, res, next) => {
   next();
 });
 
+
 app.get('/', (req, res) => {
   if (req.session.users === undefined || req.session.users.length == 0){
     res.redirect('/login');
   } else {
     res.render('home')
   }
+
 })
 
 app.get('/login', (req, res) =>{
@@ -65,7 +67,6 @@ app.get('/login', (req, res) =>{
 
 app.post('/login', (req, res) =>{
   let userInfo = req.body;
-  console.log(userInfo);
 
   req.checkBody('email', 'Email is Required').notEmpty();
 
@@ -84,6 +85,8 @@ app.post('/login', (req, res) =>{
   } else {
 
     req.session.users.push(userInfo);
+    users.push(userInfo);
+    console.log(users);
 
     res.redirect('/');
   }
