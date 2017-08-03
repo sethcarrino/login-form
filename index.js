@@ -55,8 +55,13 @@ app.get('/', (req, res) => {
   if (req.session.users === undefined || req.session.users.length == 0){
     res.redirect('/login');
   } else {
-    res.render('home')
+    let users = req.session;
+    console.log(users);
+    res.render('home', {
+      users: users
+    })
   }
+
 
 })
 
@@ -80,6 +85,7 @@ app.post('/login', (req, res) =>{
     res.render('login', {
       errors: errors,
       userInfo: userInfo
+
     })
 
   } else {
@@ -87,6 +93,7 @@ app.post('/login', (req, res) =>{
     req.session.users.push(userInfo);
     users.push(userInfo);
     console.log(users);
+
 
     res.redirect('/');
   }
